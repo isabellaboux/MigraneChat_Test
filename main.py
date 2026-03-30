@@ -41,7 +41,7 @@ async def transcribe_audio(file: UploadFile = File(...)):
             messages=[
                 {
                     "role": "user",
-                    "content": f"Please respond to this text as if you were a medical assistant, trying to get information about the patient's condition: {transcription}",
+                    "content": f"First, please respond to this text as if you were a medical assistant, trying to get information about the patient's condition. Second, generate structured notes summarizing key points from the transcription: {transcription}",
                 }
             ],
             model="llama-3.3-70b-versatile",  # Using Groq's Llama 3 model
