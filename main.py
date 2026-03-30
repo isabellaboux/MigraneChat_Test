@@ -36,22 +36,37 @@ async def transcribe_audio(file: UploadFile = File(...)):
         if not transcription:
             raise HTTPException(status_code=500, detail="Transcription failed or empty")
 
-        # Send transcription to Groq API
-        chat_completion = client.chat.completions.create(
+        # Send transcription to Groq API for medical assistant response
+        chat_completion_text = client.chat.completions.create(
             messages=[
                 {
                     "role": "user",
-                    "content": f"First, please respond to this text as if you were a medical assistant, trying to get information about the patient's condition. Second, generate structured notes summarizing key points from the transcription: {transcription}",
+                    "content": f"Please respond to this text as if you were a medical assistant, trying to get information about the patient's condition: {transcription}",
                 }
             ],
-            model="llama-3.3-70b-versatile",  # Using Groq's Llama 3 model
+            model="llama-3.3-70b-versatile",
         )
 
-        analysis = chat_completion.choices[0].message.content
+        analysis = chat_completion_text.choices[0].message.content
+
+        # Send transcription to Groq API for structured JSON
+        chat_completion_json = client.chat.completions.create(
+            messages=[
+                {
+                    "role": "user",
+                    "content": f"Generate a JSON object from the transcription with the following fields: date (current date), time (current time), migraine_intensity (0-10 scale), start_time (only include if migraine_intensity > 1). Transcription: {transcription}",
+                }
+            ],
+            model="llama-3.3-70b-versatile",
+            response_format={"type": "json_object"},
+        )
+
+        structured_data = chat_completion_json.choices[0].message.content
 
         return {
             "transcription": transcription,
-            "analysis": analysis
+            "analysis": analysis,
+            "structured_data": structured_data
         }
 
     except Exception as e:
