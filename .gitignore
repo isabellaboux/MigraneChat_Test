@@ -1,0 +1,44 @@
+# --- Python Basics ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.env
+venv/
+env/
+.venv/
+
+# --- Jupyter Notebooks ---
+.ipynb_checkpoints
+*/.ipynb_checkpoints/*
+# Note: Keep .ipynb files, but ignore the checkpoint "ghost" files
+
+# --- Data & Large Files ---
+# Never push raw data or large models to GitHub
+data/external/
+data/raw/
+data/interim/
+data/processed/
+data/test/
+*.csv
+*.json
+*.h5
+*.pkl
+*.pickle
+*.npy
+*.models/
+*.weights
+
+# --- IDEs & OS ---
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# --- Logs & Reports ---
+logs/
+*.log
+htmlcov/
+.tox/
+.coverage
+
